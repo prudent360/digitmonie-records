@@ -75,7 +75,8 @@ export default function CustomersPage() {
 
       {loading ? <div className="loading-spinner"><div className="spinner"></div></div> : customers.length > 0 ? (
         <>
-          <div className="card-table">
+          {/* Desktop table view */}
+          <div className="card-table desktop-table">
             <div className="table-wrapper">
               <table className="table">
                 <thead>
@@ -117,6 +118,50 @@ export default function CustomersPage() {
               </table>
             </div>
           </div>
+
+          {/* Mobile card view */}
+          <div className="mobile-cards">
+            {customers.map((c) => (
+              <div className="mobile-card" key={c.id}>
+                <div className="mobile-card-header">
+                  <div>
+                    <Link to={`/customers/${c.id}`} className="mobile-card-title" style={{ color: 'var(--text-primary)' }}>
+                      {c.full_name}
+                    </Link>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
+                      Added {new Date(c.created_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+                <div className="mobile-card-body">
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Phone</span>
+                    <span className="mobile-card-value">{c.phone}</span>
+                  </div>
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Email</span>
+                    <span className="mobile-card-value">{c.email || '—'}</span>
+                  </div>
+                  {c.id_number && (
+                    <div className="mobile-card-field">
+                      <span className="mobile-card-label">ID Number</span>
+                      <span className="mobile-card-value">{c.id_number}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="mobile-card-footer">
+                  <Link to={`/customers/${c.id}`} className="btn btn-secondary btn-sm">View</Link>
+                  {user.role !== 'viewer' && (
+                    <>
+                      <button className="btn btn-outline btn-sm" onClick={() => openEdit(c)}>Edit</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(c.id)}>Delete</button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
           {pagination.pages > 1 && (
             <div className="pagination">
               <button disabled={page <= 1} onClick={() => setPage(page - 1)}>← Prev</button>

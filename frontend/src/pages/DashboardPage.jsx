@@ -64,7 +64,7 @@ export default function DashboardPage() {
         }}
       >
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <h2 className="greeting-text" style={{ color: 'white', marginBottom: 8, fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em' }}>
+          <h2 style={{ color: 'white', marginBottom: 8, fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 800, letterSpacing: '-0.02em' }}>
             {getGreeting()}, {user?.name?.split(' ')[0] || 'Admin'} 👋
           </h2>
           <p className="greeting-sub" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 16, fontWeight: 500 }}>
@@ -75,7 +75,7 @@ export default function DashboardPage() {
           </p>
           
           {user.role === 'admin' && (
-            <div style={{ marginTop: 24, display: 'flex', gap: 12 }}>
+            <div className="greeting-actions">
               <Link to="/users" className="btn" style={{ background: 'white', color: '#0f172a', border: 'none' }}>
                 <svg style={{marginRight: 8}} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
                 Manage Team

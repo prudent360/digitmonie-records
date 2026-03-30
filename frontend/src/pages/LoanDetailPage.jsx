@@ -102,14 +102,14 @@ export default function LoanDetailPage() {
     <div>
       {toast && <Toast {...toast} onClose={() => setToast(null)} />}
       <div className="page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <Link to="/loans" className="btn btn-secondary btn-sm">← Back</Link>
           <div>
             <h1 className="page-title">Loan #{loan.id}</h1>
             <p className="page-subtitle">{loan.customer_name} • {loan.loan_type_name || 'Custom'}</p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <span className={`badge badge-${loan.status}`} style={{ fontSize: 14, padding: '6px 16px' }}>{loan.status}</span>
           {user.role !== 'viewer' && (
             <>

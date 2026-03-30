@@ -6,11 +6,22 @@ import './DashboardLayout.css';
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem('dm_user') || '{}');
 
   useEffect(() => {
     const token = localStorage.getItem('dm_token');
     if (!token) navigate('/login', { replace: true });
   }, [navigate]);
+
+  // Lock body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   return (
     <div className="dashboard-layout">
@@ -26,14 +37,18 @@ export default function DashboardLayout() {
               <span style={{ display: 'block', fontSize: 10, color: '#60a5fa', marginTop: -2 }}>Records</span>
             </div>
           </div>
-          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(59,130,246,0.3)', color: '#93c5fd', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 600 }}>A</div>
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(59,130,246,0.3)', color: '#93c5fd', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 600 }}>
+            {user.name?.charAt(0)?.toUpperCase() || 'A'}
+          </div>
         </header>
         <main className="dashboard-content animate-in">
           <Outlet />
         </main>
 
         {/* Floating Action Button for Mobile */}
-        <button className="fab" onClick={() => navigate('/loans/new')}>+</button>
+        {user.role !== 'viewer' && (
+          <button className="fab" onClick={() => navigate('/loans/new')}>+</button>
+        )}
       </div>
     </div>
   );

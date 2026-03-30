@@ -60,7 +60,8 @@ export default function LoansPage() {
 
       {loading ? <div className="loading-spinner"><div className="spinner"></div></div> : loans.length > 0 ? (
         <>
-          <div className="card-table">
+          {/* Desktop table view */}
+          <div className="card-table desktop-table">
             <div className="table-wrapper">
               <table className="table">
                 <thead>
@@ -107,6 +108,46 @@ export default function LoansPage() {
               </table>
             </div>
           </div>
+
+          {/* Mobile card view */}
+          <div className="mobile-cards">
+            {loans.map((l) => (
+              <div className="mobile-card" key={l.id}>
+                <div className="mobile-card-header">
+                  <div>
+                    <div className="mobile-card-title">{l.customer_name}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>#{l.id} • {l.loan_type_name || 'Custom'}</div>
+                  </div>
+                  <span className={`badge badge-${l.status}`}>{l.status}</span>
+                </div>
+                <div className="mobile-card-body">
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Principal</span>
+                    <span className="mobile-card-value">{fmt(l.principal_amount)}</span>
+                  </div>
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Monthly Pay</span>
+                    <span className="mobile-card-value">{fmt(l.monthly_payment)}</span>
+                  </div>
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Profit</span>
+                    <span className="mobile-card-value" style={{ color: '#059669' }}>{fmt(l.profit)}</span>
+                  </div>
+                  <div className="mobile-card-field">
+                    <span className="mobile-card-label">Duration</span>
+                    <span className="mobile-card-value">{l.duration_months}mo @ {l.interest_rate}%</span>
+                  </div>
+                </div>
+                <div className="mobile-card-footer">
+                  <Link to={`/loans/${l.id}`} className="btn btn-outline btn-sm">View Details</Link>
+                  {user.role !== 'viewer' && (
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(l)}>Delete</button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
           {pagination.pages > 1 && (
             <div className="pagination">
               <button disabled={page <= 1} onClick={() => setPage(page - 1)}>← Prev</button>

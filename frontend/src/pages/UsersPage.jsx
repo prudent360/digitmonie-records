@@ -90,7 +90,8 @@ export default function UsersPage() {
       {loading ? (
         <div className="loading-spinner"><div className="spinner"></div></div>
       ) : users.length > 0 ? (
-        <div className="card-table">
+        <>
+        <div className="card-table desktop-table">
           <div className="table-wrapper">
             <table className="table">
               <thead>
@@ -127,6 +128,34 @@ export default function UsersPage() {
             </table>
           </div>
         </div>
+
+        {/* Mobile card view */}
+        <div className="mobile-cards">
+          {users.map((u) => (
+            <div className="mobile-card" key={u.id}>
+              <div className="mobile-card-header">
+                <div>
+                  <div className="mobile-card-title">{u.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>{u.email}</div>
+                </div>
+                <span className={`role-badge ${u.role}`}>{u.role}</span>
+              </div>
+              <div className="mobile-card-body">
+                <div className="mobile-card-field">
+                  <span className="mobile-card-label">Date Added</span>
+                  <span className="mobile-card-value">{new Date(u.created_at).toLocaleDateString()}</span>
+                </div>
+              </div>
+              {user.role === 'admin' && (
+                <div className="mobile-card-footer">
+                  <button className="btn btn-outline btn-sm" onClick={() => openEdit(u)}>Edit</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(u)}>Delete</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        </>
       ) : (
         <div className="empty-state">
           <div className="empty-icon">👥</div>
