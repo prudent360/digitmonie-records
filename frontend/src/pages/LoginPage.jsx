@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
-import './LoginPage.css';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -27,33 +26,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <div className="login-brand">
-          <div className="login-icon">💎</div>
-          <h1 className="login-title">DigitMonie</h1>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 p-6 relative overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(14,165,233,0.1)_0%,rgba(14,165,233,0)_70%)] z-0"></div>
+      
+      <div className="relative z-[1] w-full max-w-[420px]">
+        <div className="flex flex-col items-center gap-3 mb-12">
+          <div className="w-[60px] h-[60px] bg-white rounded-[14px] flex items-center justify-center text-[28px] shadow-[0_10px_25px_rgba(0,0,0,0.2)]">💎</div>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">DigitMonie</h1>
         </div>
-        <div className="card">
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 4 }}>Welcome back</h2>
-            <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>Sign in to your account to continue</p>
+        <div className="bg-surface border border-border rounded-lg p-7">
+          <div className="text-center mb-8">
+            <h2 className="text-xl font-semibold mb-1 text-text-primary">Welcome back</h2>
+            <p className="text-sm text-text-muted">Sign in to your account to continue</p>
           </div>
-          {error && <div className="login-error">{error}</div>}
+          {error && <div className="bg-red-50 border border-red-100 text-red-900 px-4 py-3 rounded-[10px] text-sm font-semibold mb-6 flex items-center gap-2.5">{error}</div>}
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <input className="form-input" type="email" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <div className="mb-5">
+              <label className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Email Address</label>
+              <input className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-[10px] text-text-primary text-sm transition-all duration-200 min-h-[44px] focus:outline-none focus:border-primary-400 focus:ring-[3px] focus:ring-primary-500/10 placeholder:text-slate-400" type="email" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <input className="form-input" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className="mb-5">
+              <label className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Password</label>
+              <input className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-[10px] text-text-primary text-sm transition-all duration-200 min-h-[44px] focus:outline-none focus:border-primary-400 focus:ring-[3px] focus:ring-primary-500/10 placeholder:text-slate-400" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: 8 }} disabled={loading}>
+            <button type="submit" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[10px] text-sm font-medium border-none transition-all duration-200 whitespace-nowrap bg-primary-600 text-white hover:bg-primary-700 hover:shadow-[0_4px_12px_rgba(2,132,199,0.2)] w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In →'}
             </button>
           </form>
         </div>
-        <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: 12, marginTop: 32 }}>© {new Date().getFullYear()} DigitMonie. All rights reserved.</p>
+        <p className="text-center text-white/40 text-xs mt-8">© {new Date().getFullYear()} DigitMonie. All rights reserved.</p>
       </div>
     </div>
   );
