@@ -6,7 +6,9 @@ import {
   PlusCircle, 
   ClipboardList, 
   ShieldCheck,
-  LogOut
+  LogOut,
+  Settings,
+  Gem
 } from 'lucide-react';
 
 const menuItems = [
@@ -16,12 +18,14 @@ const menuItems = [
   { to: '/loans/new', label: 'New Loan', icon: PlusCircle, manageOnly: true },
   { to: '/loan-types', label: 'Loan Types', icon: ClipboardList, manageOnly: true },
   { to: '/users', label: 'Users', icon: ShieldCheck, adminOnly: true },
+  { to: '/settings', label: 'Settings', icon: Settings, adminOnly: true },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('dm_user') || '{}');
+  const logo = localStorage.getItem('dm_logo');
 
   const handleLogout = () => {
     localStorage.removeItem('dm_token');
@@ -34,7 +38,9 @@ export default function Sidebar({ isOpen, onClose }) {
       {isOpen && <div className="hidden max-lg:block fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[99]" onClick={onClose}></div>}
       <aside className={`fixed top-0 left-0 w-[260px] h-screen bg-slate-900 flex flex-col z-[100] transition-transform duration-300 ease-in-out border-r border-white/[0.06] ${isOpen ? 'translate-x-0 shadow-[20px_0_50px_rgba(0,0,0,0.5)]' : 'max-lg:-translate-x-full'}`}>
         <div className="flex items-center gap-3 px-6 py-7">
-          <span className="w-[38px] h-[38px] bg-white rounded-[10px] flex items-center justify-center text-lg text-slate-900">💎</span>
+          <span className="w-[38px] h-[38px] bg-white rounded-[10px] flex items-center justify-center text-lg text-slate-900 overflow-hidden">
+            {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <Gem size={20} />}
+          </span>
           <div>
             <h1 className="text-xl font-bold text-white leading-none tracking-tight">DigitMonie</h1>
             <span className="text-[11px] text-white/35 font-medium block mt-[3px] tracking-wider uppercase">RECORDS</span>

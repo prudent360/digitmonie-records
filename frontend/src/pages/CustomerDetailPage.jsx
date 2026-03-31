@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 import api from '../lib/api';
 
 const badgeClass = (status) => {
@@ -33,7 +34,7 @@ export default function CustomerDetailPage() {
           <Link to="/customers" className={btnSecondarySm}>← Back</Link>
           <div><h1 className="text-[26px] font-bold text-text-primary tracking-tight leading-[1.2] max-md:text-[22px] max-sm:text-xl">{customer.full_name}</h1><p className="text-sm text-text-muted mt-1">Customer Profile</p></div>
         </div>
-        {user.role !== 'viewer' && <Link to={`/loans/new?customer_id=${customer.id}`} className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`}>➕ New Loan</Link>}
+        {user.role !== 'viewer' && <Link to={`/loans/new?customer_id=${customer.id}`} className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`}><Plus size={16} /> New Loan</Link>}
       </div>
 
       <div className="bg-surface border border-border rounded-lg p-7 mb-7 max-md:p-5 max-sm:p-4">

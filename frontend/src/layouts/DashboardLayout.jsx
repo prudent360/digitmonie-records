@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { Gem } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
+import api from '../lib/api';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('dm_user') || '{}');
+  const [logo, setLogo] = useState(localStorage.getItem('dm_logo'));
 
   useEffect(() => {
     const token = localStorage.getItem('dm_token');
     if (!token) navigate('/login', { replace: true });
   }, [navigate]);
+
+  // Fetch settings (logo) on mount
+  useEffect(() => {
+    api.getSettings().then(res => {
+      if (res.settings?.logo) {
+        localStorage.setItem('dm_logo', res.settings.logo);
+        setLogo(res.settings.logo);
+      }
+    }).catch(() => {});
+  }, []);
 
   // Lock body scroll when sidebar is open on mobile
   useEffect(() => {
@@ -30,7 +43,9 @@ export default function DashboardLayout() {
         <header className="hidden max-lg:flex fixed top-0 left-0 right-0 h-[60px] bg-slate-900 z-50 items-center justify-between px-5 shadow-card-md max-sm:px-3 max-sm:h-14">
           <button className="hidden max-lg:flex w-11 h-11 items-center justify-center bg-white/[0.06] border border-white/10 rounded-[10px] text-white text-[22px] cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>☰</button>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center text-base">💎</div>
+            <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center text-base overflow-hidden">
+              {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <Gem size={16} className="text-white" />}
+            </div>
             <div>
               <span className="text-base font-semibold text-white">DigitMonie</span>
               <span className="block text-[10px] text-blue-400 -mt-0.5">Records</span>

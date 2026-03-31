@@ -9,6 +9,7 @@ import LoansPage from './pages/LoansPage';
 import NewLoanPage from './pages/NewLoanPage';
 import LoanDetailPage from './pages/LoanDetailPage';
 import UsersPage from './pages/UsersPage';
+import SettingsPage from './pages/SettingsPage';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('dm_token');
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="loans/new" element={<NewLoanPage />} />
         <Route path="loans/:id" element={<LoanDetailPage />} />
         <Route path="users" element={<UsersPage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   );

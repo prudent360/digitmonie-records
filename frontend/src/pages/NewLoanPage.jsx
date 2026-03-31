@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Banknote, BarChart3, Calendar, Calculator } from 'lucide-react';
 import api from '../lib/api';
 import Toast from '../components/Toast';
 
@@ -90,7 +91,7 @@ export default function NewLoanPage() {
               <div className="mb-5"><label className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Admin Fee (%)</label><input className={inputBase} type="number" step="0.01" min="0" value={formData.admin_fee_percent} onChange={(e) => setFormData({ ...formData, admin_fee_percent: e.target.value })} /></div>
             </div>
             <div className="mb-5"><label className="block text-xs font-medium text-text-muted mb-1.5 uppercase tracking-wider">Disbursement Date *</label><input className={inputBase} type="date" value={formData.disbursement_date} onChange={(e) => setFormData({ ...formData, disbursement_date: e.target.value })} required /></div>
-            <button type="submit" className={`${btnBase} px-6 py-3 text-[15px] bg-primary-600 text-white hover:bg-primary-700 hover:shadow-[0_4px_12px_rgba(2,132,199,0.2)] w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed`} disabled={saving}>{saving ? 'Creating...' : '💰 Create Loan'}</button>
+            <button type="submit" className={`${btnBase} px-6 py-3 text-[15px] bg-primary-600 text-white hover:bg-primary-700 hover:shadow-[0_4px_12px_rgba(2,132,199,0.2)] w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed`} disabled={saving}>{saving ? 'Creating...' : <><Banknote size={18} className="mr-1" /> Create Loan</>}</button>
           </form>
         </div>
 
@@ -98,7 +99,7 @@ export default function NewLoanPage() {
           {preview ? (
             <>
               <div className="bg-surface border border-border rounded-lg p-7 mb-5 max-md:p-5 max-sm:p-4">
-                <h3 className="text-base font-semibold text-text-primary mb-5">📊 Calculation Preview</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-5 flex items-center gap-2"><BarChart3 size={18} className="text-text-muted" /> Calculation Preview</h3>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-5 bg-muted p-6 rounded-lg border border-border max-md:p-4 max-md:gap-4 max-sm:grid-cols-2">
                   <div className="text-left"><div className="text-lg font-bold text-primary-700 mb-0.5 max-md:text-base">{fmt(preview.monthly_payment)}</div><div className="text-[11px] text-text-muted uppercase tracking-wider font-medium">Monthly Payment</div></div>
                   <div className="text-left"><div className="text-lg font-bold text-primary-700 mb-0.5 max-md:text-base">{fmt(preview.total_interest)}</div><div className="text-[11px] text-text-muted uppercase tracking-wider font-medium">Total Interest</div></div>
@@ -108,7 +109,7 @@ export default function NewLoanPage() {
                 </div>
               </div>
               <div className="bg-surface border border-border rounded-lg p-7 max-md:p-5 max-sm:p-4">
-                <h3 className="text-base font-semibold text-text-primary mb-4">📅 Repayment Schedule</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2"><Calendar size={18} className="text-text-muted" /> Repayment Schedule</h3>
                 <div className="overflow-x-auto -webkit-overflow-scrolling-touch -mx-7 px-7 max-md:-mx-5 max-md:px-5">
                   <table className="w-full border-collapse">
                     <thead><tr>
@@ -125,7 +126,7 @@ export default function NewLoanPage() {
             </>
           ) : (
             <div className="bg-surface border border-border rounded-lg p-[60px] text-center max-md:p-10">
-              <div className="text-5xl mb-4 opacity-40">🧮</div>
+              <div className="mb-4 opacity-40"><Calculator size={48} /></div>
               <h3 className="text-text-secondary mb-2 font-semibold">Calculation Preview</h3>
               <p className="text-text-muted text-sm">Fill in amount, rate, and duration to see live reducing balance calculation</p>
             </div>

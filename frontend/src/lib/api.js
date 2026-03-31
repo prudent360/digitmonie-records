@@ -195,6 +195,18 @@ class ApiClient {
   deleteUser(id) {
     return this.request(`/users/${id}`, { method: 'DELETE' });
   }
+
+  // Settings
+  getSettings() {
+    return this.request('/settings');
+  }
+
+  updateSettings(data) {
+    return this.request('/settings', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 const api = new ApiClient();

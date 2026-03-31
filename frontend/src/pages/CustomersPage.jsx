@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { Plus, Search, Users } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
@@ -75,12 +76,12 @@ export default function CustomersPage() {
           <h1 className="text-[26px] font-bold text-text-primary tracking-tight leading-[1.2] max-md:text-[22px] max-sm:text-xl">Customers</h1>
           <p className="text-sm text-text-muted mt-1 max-sm:text-[13px]">{pagination.total || 0} total customers</p>
         </div>
-        {user.role !== 'viewer' && <button className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`} onClick={openAdd}>➕ Add Customer</button>}
+        {user.role !== 'viewer' && <button className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`} onClick={openAdd}><Plus size={16} /> Add Customer</button>}
       </div>
 
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <div className="relative flex items-center max-w-[400px] w-full">
-          <span className="absolute left-3.5 text-sm opacity-50 pointer-events-none">🔍</span>
+          <span className="absolute left-3.5 opacity-50 pointer-events-none"><Search size={16} /></span>
           <input className={`${inputBase} pl-10`} placeholder="Search customers..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
       </div>
@@ -167,7 +168,7 @@ export default function CustomersPage() {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface rounded-lg border border-dashed border-border max-md:py-12">
-          <div className="text-5xl mb-5 opacity-40 max-md:text-4xl">👥</div>
+          <div className="mb-5 opacity-40"><Users size={48} /></div>
           <h3 className="text-base font-semibold mb-2 text-text-primary">No customers found</h3>
           <p className="text-sm text-text-muted mb-6 max-w-[300px]">Add your first customer to get started</p>
           <button className={btnPrimary} onClick={openAdd}>Add Customer</button>

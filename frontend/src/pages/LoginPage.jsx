@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Gem } from 'lucide-react';
 import api from '../lib/api';
 
 export default function LoginPage() {
@@ -8,6 +9,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState(null);
+
+  useEffect(() => {
+    api.getSettings().then(res => {
+      if (res.settings?.logo) {
+        setLogo(res.settings.logo);
+        localStorage.setItem('dm_logo', res.settings.logo);
+      }
+    }).catch(() => {});
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,12 +38,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 p-6 relative overflow-hidden">
-      {/* Subtle background glow */}
       <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(14,165,233,0.1)_0%,rgba(14,165,233,0)_70%)] z-0"></div>
       
       <div className="relative z-[1] w-full max-w-[420px]">
         <div className="flex flex-col items-center gap-3 mb-12">
-          <div className="w-[60px] h-[60px] bg-white rounded-[14px] flex items-center justify-center text-[28px] shadow-[0_10px_25px_rgba(0,0,0,0.2)]">💎</div>
+          <div className="w-[60px] h-[60px] bg-white rounded-[14px] flex items-center justify-center text-[28px] shadow-[0_10px_25px_rgba(0,0,0,0.2)] overflow-hidden">
+            {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <Gem size={28} className="text-slate-900" />}
+          </div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight">DigitMonie</h1>
         </div>
         <div className="bg-surface border border-border rounded-lg p-7">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Banknote, TrendingUp, BarChart3, Users, CircleCheck, Clock, AlertTriangle, Landmark, Gem } from 'lucide-react';
 import api from '../lib/api';
 
 export default function DashboardPage() {
@@ -35,14 +36,18 @@ export default function DashboardPage() {
     return 'Good Evening';
   };
 
-  const StatCard = ({ icon, value, label, colorClasses, watermark }) => (
+  const StatCard = ({ icon: Icon, value, label, colorClasses }) => (
     <div className="bg-surface border border-border rounded-lg p-6 flex items-center gap-5 relative overflow-hidden transition-all duration-200 hover:shadow-card-md hover:border-primary-200 max-md:p-5 max-md:gap-4 max-sm:p-4 max-sm:gap-3.5">
-      <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center text-[22px] shrink-0 max-md:w-[42px] max-md:h-[42px] max-md:text-lg max-sm:w-[38px] max-sm:h-[38px] max-sm:text-base max-sm:rounded-lg ${colorClasses}`}>{icon}</div>
+      <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center shrink-0 max-md:w-[42px] max-md:h-[42px] max-sm:w-[38px] max-sm:h-[38px] max-sm:rounded-lg ${colorClasses}`}>
+        <Icon size={22} className="max-md:w-[18px] max-md:h-[18px] max-sm:w-4 max-sm:h-4" />
+      </div>
       <div className="min-w-0 relative z-[1] flex-1">
         <div className="text-lg font-bold text-text-primary tracking-tight leading-[1.3] break-words max-sm:text-base">{value}</div>
         <div className="text-[13px] text-text-muted font-medium mt-1 max-sm:text-xs">{label}</div>
       </div>
-      <span className="absolute -top-2.5 -right-2.5 text-[100px] opacity-[0.04] rotate-[15deg] pointer-events-none z-0 max-md:text-[70px]">{watermark}</span>
+      <div className="absolute -top-2.5 -right-2.5 opacity-[0.06] pointer-events-none z-0 rotate-[15deg]">
+        <Icon size={90} className="max-md:w-[60px] max-md:h-[60px]" />
+      </div>
     </div>
   );
 
@@ -63,7 +68,7 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-8 mb-8 border-none relative overflow-hidden rounded-xl animate-slide-up">
         <div className="relative z-[2]">
           <h2 className="text-white mb-2 text-[clamp(20px,5vw,28px)] font-extrabold tracking-tight">
-            {getGreeting()}, {user?.name?.split(' ')[0] || 'Admin'} 👋
+            {getGreeting()}, {user?.name?.split(' ')[0] || 'Admin'}
           </h2>
           <p className="text-white/70 text-base font-medium">
             {user.role === 'admin' 
@@ -75,7 +80,7 @@ export default function DashboardPage() {
           {user.role === 'admin' && (
             <div className="flex gap-3 mt-6 max-md:flex-col">
               <Link to="/users" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[10px] text-sm font-medium border-none transition-all duration-200 whitespace-nowrap bg-white text-slate-900 max-md:w-full max-md:min-h-[44px]">
-                <svg className="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <Users size={16} className="mr-1" />
                 Manage Team
               </Link>
               <Link to="/loans/new" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[10px] text-sm font-medium transition-all duration-200 whitespace-nowrap bg-white/10 text-white border border-white/20 max-md:w-full max-md:min-h-[44px]">
@@ -84,21 +89,23 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-        <div className="absolute -right-5 -top-5 text-[160px] opacity-[0.08] pointer-events-none z-[1]">💎</div>
+        <div className="absolute -right-5 -top-5 opacity-[0.08] pointer-events-none z-[1]">
+          <Gem size={160} />
+        </div>
       </div>
 
       <div className="grid grid-cols-4 gap-5 mb-7 max-lg:grid-cols-2 max-md:gap-3 max-sm:grid-cols-1">
-        <StatCard icon="💰" value={fmt(s.total_disbursed)} label="Total Disbursed" colorClasses="bg-purple-50 text-purple-500" watermark="💰" />
-        <StatCard icon="📈" value={fmt(s.total_profit)} label="Total Profit" colorClasses="bg-green-50 text-green-500" watermark="📈" />
-        <StatCard icon="📊" value={s.active_loans || 0} label="Active Loans" colorClasses="bg-blue-50 text-blue-500" watermark="📊" />
-        <StatCard icon="👥" value={s.total_customers || 0} label="Total Customers" colorClasses="bg-amber-50 text-amber-500" watermark="👥" />
+        <StatCard icon={Banknote} value={fmt(s.total_disbursed)} label="Total Disbursed" colorClasses="bg-purple-50 text-purple-500" />
+        <StatCard icon={TrendingUp} value={fmt(s.total_profit)} label="Total Profit" colorClasses="bg-green-50 text-green-500" />
+        <StatCard icon={BarChart3} value={s.active_loans || 0} label="Active Loans" colorClasses="bg-blue-50 text-blue-500" />
+        <StatCard icon={Users} value={s.total_customers || 0} label="Total Customers" colorClasses="bg-amber-50 text-amber-500" />
       </div>
 
       <div className="grid grid-cols-4 gap-5 mb-7 max-lg:grid-cols-2 max-md:gap-3 max-sm:grid-cols-1">
-        <StatCard icon="✅" value={fmt(s.total_collected)} label="Total Collected" colorClasses="bg-green-50 text-green-500" watermark="✅" />
-        <StatCard icon="⏳" value={fmt(s.total_pending)} label="Pending Payments" colorClasses="bg-amber-50 text-amber-500" watermark="⏳" />
-        <StatCard icon="⚠️" value={s.overdue_count || 0} label="Overdue Payments" colorClasses="bg-red-50 text-red-500" watermark="⚠️" />
-        <StatCard icon="🏦" value={fmt(s.total_interest)} label="Total Interest Earned" colorClasses="bg-indigo-50 text-indigo-500" watermark="🏦" />
+        <StatCard icon={CircleCheck} value={fmt(s.total_collected)} label="Total Collected" colorClasses="bg-green-50 text-green-500" />
+        <StatCard icon={Clock} value={fmt(s.total_pending)} label="Pending Payments" colorClasses="bg-amber-50 text-amber-500" />
+        <StatCard icon={AlertTriangle} value={s.overdue_count || 0} label="Overdue Payments" colorClasses="bg-red-50 text-red-500" />
+        <StatCard icon={Landmark} value={fmt(s.total_interest)} label="Total Interest Earned" colorClasses="bg-indigo-50 text-indigo-500" />
       </div>
 
       <div className="grid grid-cols-2 gap-6 max-lg:grid-cols-1">
@@ -108,7 +115,7 @@ export default function DashboardPage() {
             <Link to="/loans" className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-[10px] text-[13px] font-medium transition-all duration-200 whitespace-nowrap bg-muted text-text-primary border border-border hover:bg-border">View All</Link>
           </div>
           {data?.recent_loans?.length > 0 ? (
-            <div className="overflow-x-auto -webkit-overflow-scrolling-touch -mx-7 px-7 max-md:-mx-5 max-md:px-5">
+            <div className="overflow-x-auto -mx-7 px-7 max-md:-mx-5 max-md:px-5">
               <table className="w-full border-collapse">
                 <thead><tr>
                   <th className="text-left px-4 py-3 text-[11px] font-medium uppercase tracking-wider text-text-muted border-b border-border whitespace-nowrap">Customer</th>
@@ -132,7 +139,7 @@ export default function DashboardPage() {
         <div className="bg-surface border border-border rounded-lg p-7 max-md:p-5 max-sm:p-4">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-border max-md:mb-4 max-md:pb-3"><h3 className="text-base font-semibold text-text-primary">Upcoming Payments</h3></div>
           {data?.upcoming_repayments?.length > 0 ? (
-            <div className="overflow-x-auto -webkit-overflow-scrolling-touch -mx-7 px-7 max-md:-mx-5 max-md:px-5">
+            <div className="overflow-x-auto -mx-7 px-7 max-md:-mx-5 max-md:px-5">
               <table className="w-full border-collapse">
                 <thead><tr>
                   <th className="text-left px-4 py-3 text-[11px] font-medium uppercase tracking-wider text-text-muted border-b border-border whitespace-nowrap">Customer</th>

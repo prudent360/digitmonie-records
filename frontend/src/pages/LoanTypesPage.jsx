@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Plus, ClipboardList } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
@@ -48,7 +49,7 @@ export default function LoanTypesPage() {
       {toast && <Toast {...toast} onClose={() => setToast(null)} />}
       <div className="flex items-end justify-between mb-8 flex-wrap gap-4 max-md:flex-col max-md:items-start">
         <div><h1 className="text-[26px] font-bold text-text-primary tracking-tight leading-[1.2] max-md:text-[22px] max-sm:text-xl">Loan Types</h1><p className="text-sm text-text-muted mt-1">Manage loan categories and templates</p></div>
-        <button className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`} onClick={openAdd}>➕ Add Loan Type</button>
+        <button className={`${btnPrimary} max-md:w-full max-md:min-h-[44px]`} onClick={openAdd}><Plus size={16} /> Add Loan Type</button>
       </div>
 
       {loanTypes.length > 0 ? (
@@ -68,7 +69,7 @@ export default function LoanTypesPage() {
             </div>
           ))}
         </div>
-      ) : <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface rounded-lg border border-dashed border-border max-md:py-12"><div className="text-5xl mb-5 opacity-40">📋</div><h3 className="text-base font-semibold mb-2 text-text-primary">No loan types yet</h3><p className="text-sm text-text-muted mb-6 max-w-[300px]">Create templates for quick loan setup</p><button className={btnPrimary} onClick={openAdd}>Add Loan Type</button></div>}
+      ) : <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface rounded-lg border border-dashed border-border max-md:py-12"><div className="mb-5 opacity-40"><ClipboardList size={48} /></div><h3 className="text-base font-semibold mb-2 text-text-primary">No loan types yet</h3><p className="text-sm text-text-muted mb-6 max-w-[300px]">Create templates for quick loan setup</p><button className={btnPrimary} onClick={openAdd}>Add Loan Type</button></div>}
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={editing ? 'Edit Loan Type' : 'Add Loan Type'}>
         <form onSubmit={handleSubmit}>

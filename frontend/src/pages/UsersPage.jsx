@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Users as UsersIcon } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
@@ -164,7 +165,7 @@ export default function UsersPage() {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface rounded-lg border border-dashed border-border max-md:py-12">
-          <div className="text-5xl mb-5 opacity-40">👥</div>
+          <div className="mb-5 opacity-40"><UsersIcon size={48} /></div>
           <h3 className="text-base font-semibold mb-2 text-text-primary">No users found</h3>
           <p className="text-sm text-text-muted mb-6 max-w-[300px]">Create your first team member to get started</p>
           {user.role === 'admin' && <button className={btnPrimary} onClick={openAdd}>Add User</button>}

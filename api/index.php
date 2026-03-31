@@ -164,6 +164,18 @@ try {
         elseif ($method === 'DELETE') $response = $controller->delete($matches[1]);
     }
 
+    // Settings routes
+    elseif ($path === '/settings' && $method === 'GET') {
+        require_once __DIR__ . '/controllers/SettingsController.php';
+        $controller = new SettingsController();
+        $response = $controller->index();
+    }
+    elseif ($path === '/settings' && $method === 'PUT') {
+        require_once __DIR__ . '/controllers/SettingsController.php';
+        $controller = new SettingsController();
+        $response = $controller->update();
+    }
+
     // 404
     else {
         http_response_code(404);

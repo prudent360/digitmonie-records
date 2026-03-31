@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Banknote, BarChart3, TrendingUp, Calendar, Pencil, Trash2 } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
@@ -126,8 +127,8 @@ export default function LoanDetailPage() {
           <span className={`inline-flex items-center px-4 py-1.5 rounded-md text-sm font-medium ${badgeClass(loan.status)}`}>{loan.status}</span>
           {user.role !== 'viewer' && (
             <>
-              <button className={btnOutlineSm} onClick={openEdit}>✏️ Edit</button>
-              <button className={btnDangerSm} onClick={handleDelete}>🗑️ Delete</button>
+              <button className={btnOutlineSm} onClick={openEdit}><Pencil size={14} className="mr-1" /> Edit</button>
+              <button className={btnDangerSm} onClick={handleDelete}><Trash2 size={14} className="mr-1" /> Delete</button>
               {loan.status === 'active' && <button className={btnDangerSm} onClick={() => changeStatus('defaulted')}>Mark Defaulted</button>}
               {loan.status === 'defaulted' && <button className={btnSuccessSm} onClick={() => changeStatus('active')}>Reactivate</button>}
             </>
@@ -137,18 +138,18 @@ export default function LoanDetailPage() {
 
       <div className="grid grid-cols-4 gap-5 mb-7 max-lg:grid-cols-2 max-md:gap-3 max-sm:grid-cols-1">
         {[
-          { icon: '💰', value: fmt(loan.principal_amount), label: 'Principal Amount', color: 'bg-purple-50 text-purple-500' },
-          { icon: '📊', value: fmt(loan.monthly_payment), label: 'Monthly Payment (EMI)', color: 'bg-blue-50 text-blue-500' },
-          { icon: '📈', value: fmt(loan.profit), label: 'Total Profit', color: 'bg-green-50 text-green-500', valueColor: 'text-emerald-600' },
-          { icon: '📅', value: `${paidCount}/${totalCount}`, label: 'Payments Made', color: 'bg-amber-50 text-amber-500' },
+          { icon: Banknote, value: fmt(loan.principal_amount), label: 'Principal Amount', color: 'bg-purple-50 text-purple-500' },
+          { icon: BarChart3, value: fmt(loan.monthly_payment), label: 'Monthly Payment (EMI)', color: 'bg-blue-50 text-blue-500' },
+          { icon: TrendingUp, value: fmt(loan.profit), label: 'Total Profit', color: 'bg-green-50 text-green-500', valueColor: 'text-emerald-600' },
+          { icon: Calendar, value: `${paidCount}/${totalCount}`, label: 'Payments Made', color: 'bg-amber-50 text-amber-500' },
         ].map((stat, i) => (
           <div key={i} className="bg-surface border border-border rounded-lg p-6 flex items-center gap-5 relative overflow-hidden transition-all duration-200 hover:shadow-card-md hover:border-primary-200 max-md:p-5 max-md:gap-4 max-sm:p-4 max-sm:gap-3.5">
-            <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center text-[22px] shrink-0 max-md:w-[42px] max-md:h-[42px] max-sm:w-[38px] max-sm:h-[38px] ${stat.color}`}>{stat.icon}</div>
+            <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center shrink-0 max-md:w-[42px] max-md:h-[42px] max-sm:w-[38px] max-sm:h-[38px] ${stat.color}`}><stat.icon size={22} /></div>
             <div className="min-w-0 relative z-[1] flex-1">
               <div className={`text-lg font-bold tracking-tight leading-[1.3] break-words max-sm:text-base ${stat.valueColor || 'text-text-primary'}`}>{stat.value}</div>
               <div className="text-[13px] text-text-muted font-medium mt-1 max-sm:text-xs">{stat.label}</div>
             </div>
-            <span className="absolute -top-2.5 -right-2.5 text-[100px] opacity-[0.04] rotate-[15deg] pointer-events-none z-0 max-md:text-[70px]">{stat.icon}</span>
+            <div className="absolute -top-2.5 -right-2.5 opacity-[0.04] rotate-[15deg] pointer-events-none z-0"><stat.icon size={90} className="max-md:w-[60px] max-md:h-[60px]" /></div>
           </div>
         ))}
       </div>
@@ -173,7 +174,7 @@ export default function LoanDetailPage() {
       </div>
 
       <div className="bg-surface border border-border rounded-lg p-7 max-md:p-5 max-sm:p-4">
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-border max-md:mb-4 max-md:pb-3"><h3 className="text-base font-semibold text-text-primary">📅 Repayment Schedule (Reducing Balance)</h3></div>
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-border max-md:mb-4 max-md:pb-3"><h3 className="text-base font-semibold text-text-primary flex items-center gap-2"><Calendar size={18} className="text-text-muted" /> Repayment Schedule (Reducing Balance)</h3></div>
         {loan.repayments?.length > 0 ? (
           <div className="overflow-x-auto -webkit-overflow-scrolling-touch -mx-7 px-7 max-md:-mx-5 max-md:px-5 max-sm:-mx-4 max-sm:px-4">
             <table className="w-full border-collapse">
