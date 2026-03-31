@@ -36,7 +36,7 @@ export default function LoanDetailPage() {
   const markPaid = async (repId) => {
     try {
       const r = await api.markRepaymentPaid(repId, new Date().toISOString().split('T')[0]);
-      setToast({ message: r.loan_completed ? 'Loan completed! 🎉' : 'Payment recorded', type: 'success' });
+      setToast({ message: r.loan_completed ? 'Loan completed!' : 'Payment recorded', type: 'success' });
       loadLoan();
     } catch (e) { setToast({ message: e.message, type: 'error' }); }
   };
@@ -113,17 +113,19 @@ export default function LoanDetailPage() {
   const progress = totalCount > 0 ? Math.round((paidCount / totalCount) * 100) : 0;
 
   return (
-    <div>
+    <div className="min-w-0">
       {toast && <Toast {...toast} onClose={() => setToast(null)} />}
+
+      {/* Header: stacks on mobile */}
       <div className="flex items-end justify-between mb-8 flex-wrap gap-4 max-md:flex-col max-md:items-start">
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-4 flex-wrap min-w-0">
           <Link to="/loans" className={btnSecondarySm}>← Back</Link>
-          <div>
-            <h1 className="text-[26px] font-bold text-text-primary tracking-tight leading-[1.2] max-md:text-[22px] max-sm:text-xl">Loan #{loan.id}</h1>
-            <p className="text-sm text-text-muted mt-1">{loan.customer_name} • {loan.loan_type_name || 'Custom'}</p>
+          <div className="min-w-0">
+            <h1 className="text-[26px] font-bold text-text-primary tracking-tight leading-[1.2] max-md:text-[22px] max-sm:text-xl truncate">Loan #{loan.id}</h1>
+            <p className="text-sm text-text-muted mt-1 truncate">{loan.customer_name} • {loan.loan_type_name || 'Custom'}</p>
           </div>
         </div>
-        <div className="flex gap-2 items-center flex-wrap">
+        <div className="flex gap-2 items-center flex-wrap max-md:w-full">
           <span className={`inline-flex items-center px-4 py-1.5 rounded-md text-sm font-medium ${badgeClass(loan.status)}`}>{loan.status}</span>
           {user.role !== 'viewer' && (
             <>
@@ -136,6 +138,7 @@ export default function LoanDetailPage() {
         </div>
       </div>
 
+      {/* Stat Cards */}
       <div className="grid grid-cols-4 gap-5 mb-7 max-lg:grid-cols-2 max-md:gap-3 max-sm:grid-cols-1">
         {[
           { icon: Banknote, value: fmt(loan.principal_amount), label: 'Principal Amount', color: 'bg-purple-50 text-purple-500' },
@@ -154,55 +157,92 @@ export default function LoanDetailPage() {
         ))}
       </div>
 
+      {/* Loan Details */}
       <div className="bg-surface border border-border rounded-lg p-7 mb-7 max-md:p-5 max-sm:p-4">
         <h3 className="text-base font-semibold text-text-primary mb-5">Loan Details</h3>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-7 max-md:gap-5 max-sm:grid-cols-2 max-sm:gap-4">
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Customer</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]"><Link to={`/customers/${loan.customer_id}`} className="text-primary-600">{loan.customer_name}</Link></span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Interest Rate</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{loan.interest_rate}% {loan.interest_period}</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Duration</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{loan.duration_months} months</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Admin Fee</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{loan.admin_fee_percent}% ({fmt(loan.admin_fee_amount)})</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Total Interest</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{fmt(loan.total_interest)}</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Total Repayment</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{fmt(loan.total_repayment)}</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Disbursement Date</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">{new Date(loan.disbursement_date).toLocaleDateString()}</span></div>
-          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Payment Progress</span><span className="text-base font-semibold text-text-primary max-md:text-[15px]">
+        <div className="grid grid-cols-2 gap-7 lg:grid-cols-4 max-sm:gap-4">
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Customer</span><span className="text-[15px] font-semibold text-text-primary break-words"><Link to={`/customers/${loan.customer_id}`} className="text-primary-600">{loan.customer_name}</Link></span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Interest Rate</span><span className="text-[15px] font-semibold text-text-primary">{loan.interest_rate}% {loan.interest_period}</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Duration</span><span className="text-[15px] font-semibold text-text-primary">{loan.duration_months} months</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Admin Fee</span><span className="text-[15px] font-semibold text-text-primary break-words">{loan.admin_fee_percent}% ({fmt(loan.admin_fee_amount)})</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Total Interest</span><span className="text-[15px] font-semibold text-text-primary break-words">{fmt(loan.total_interest)}</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Total Repayment</span><span className="text-[15px] font-semibold text-text-primary break-words">{fmt(loan.total_repayment)}</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Disbursement Date</span><span className="text-[15px] font-semibold text-text-primary">{new Date(loan.disbursement_date).toLocaleDateString()}</span></div>
+          <div className="flex flex-col gap-1.5"><span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Payment Progress</span>
             <div className="flex items-center gap-3">
               <div className="flex-1 h-2 rounded bg-muted overflow-hidden"><div className="h-full rounded bg-gradient-to-r from-primary-500 to-success transition-[width] duration-500 ease-in-out" style={{ width: `${progress}%` }}></div></div>
               <span className="text-sm font-semibold">{progress}%</span>
             </div>
-          </span></div>
+          </div>
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-lg p-7 max-md:p-5 max-sm:p-4">
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-border max-md:mb-4 max-md:pb-3"><h3 className="text-base font-semibold text-text-primary flex items-center gap-2"><Calendar size={18} className="text-text-muted" /> Repayment Schedule (Reducing Balance)</h3></div>
+      {/* Repayment Schedule */}
+      <div className="bg-surface border border-border rounded-lg max-md:rounded-lg">
+        <div className="flex items-center justify-between px-7 py-5 border-b border-border max-md:px-5 max-sm:px-4">
+          <h3 className="text-base font-semibold text-text-primary flex items-center gap-2"><Calendar size={18} className="text-text-muted" /> Repayment Schedule</h3>
+        </div>
+
         {loan.repayments?.length > 0 ? (
-          <div className="overflow-x-auto -webkit-overflow-scrolling-touch -mx-7 px-7 max-md:-mx-5 max-md:px-5 max-sm:-mx-4 max-sm:px-4">
-            <table className="w-full border-collapse">
-              <thead><tr>
-                {['Month','Due Date','Opening Bal.','Principal','Interest','Payment','Closing Bal.','Status','Action'].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-[11px] font-medium uppercase tracking-wider text-text-muted border-b border-border whitespace-nowrap max-md:px-3 max-md:text-[10px]">{h}</th>
-                ))}
-              </tr></thead>
-              <tbody>
-                {loan.repayments.map(r => (
-                  <tr key={r.id} className={`transition-all duration-200 hover:bg-muted last:*:border-b-0 ${r.status === 'paid' ? 'opacity-70' : ''}`}>
-                    <td className="px-4 py-4 border-b border-border text-sm text-text-secondary whitespace-nowrap max-md:px-3 max-md:py-3 max-md:text-[13px]">{r.month_number}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm text-text-secondary whitespace-nowrap max-md:px-3 max-md:py-3 max-md:text-[13px]">{new Date(r.due_date).toLocaleDateString()}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums max-md:px-3 max-md:py-3 max-md:text-[13px]">{fmt(r.opening_balance)}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums max-md:px-3 max-md:py-3 max-md:text-[13px]">{fmt(r.principal_component)}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm font-semibold text-amber-600 whitespace-nowrap tabular-nums max-md:px-3 max-md:py-3 max-md:text-[13px]">{fmt(r.interest_component)}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm font-bold text-text-primary whitespace-nowrap tabular-nums max-md:px-3 max-md:py-3 max-md:text-[13px]">{fmt(r.amount_due)}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums max-md:px-3 max-md:py-3 max-md:text-[13px]">{fmt(r.closing_balance)}</td>
-                    <td className="px-4 py-4 border-b border-border text-sm whitespace-nowrap max-md:px-3 max-md:py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${badgeClass(r.status)}`}>{r.status}</span></td>
-                    {user.role !== 'viewer' && (
-                      <td className="px-4 py-4 border-b border-border text-sm whitespace-nowrap max-md:px-3 max-md:py-3">{r.status === 'paid' ? <button className={btnSecondarySm} onClick={() => markUnpaid(r.id)}>Undo</button> : <button className={btnSuccessSm} onClick={() => markPaid(r.id)}>✓ Pay</button>}</td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface rounded-lg border border-dashed border-border"><p className="text-sm text-text-muted">No schedule found</p></div>}
+          <>
+            {/* Desktop table — hidden on small screens */}
+            <div className="overflow-x-auto max-md:hidden">
+              <table className="w-full border-collapse min-w-[900px]">
+                <thead><tr>
+                  {['Month','Due Date','Opening Bal.','Principal','Interest','Payment','Closing Bal.','Status','Action'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-[11px] font-medium uppercase tracking-wider text-text-muted border-b border-border whitespace-nowrap">{h}</th>
+                  ))}
+                </tr></thead>
+                <tbody>
+                  {loan.repayments.map(r => (
+                    <tr key={r.id} className={`transition-all duration-200 hover:bg-muted last:*:border-b-0 ${r.status === 'paid' ? 'opacity-70' : ''}`}>
+                      <td className="px-4 py-4 border-b border-border text-sm text-text-secondary whitespace-nowrap">{r.month_number}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm text-text-secondary whitespace-nowrap">{new Date(r.due_date).toLocaleDateString()}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums">{fmt(r.opening_balance)}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums">{fmt(r.principal_component)}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm font-semibold text-amber-600 whitespace-nowrap tabular-nums">{fmt(r.interest_component)}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm font-bold text-text-primary whitespace-nowrap tabular-nums">{fmt(r.amount_due)}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm font-semibold text-text-primary whitespace-nowrap tabular-nums">{fmt(r.closing_balance)}</td>
+                      <td className="px-4 py-4 border-b border-border text-sm whitespace-nowrap"><span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${badgeClass(r.status)}`}>{r.status}</span></td>
+                      {user.role !== 'viewer' && (
+                        <td className="px-4 py-4 border-b border-border text-sm whitespace-nowrap">{r.status === 'paid' ? <button className={btnSecondarySm} onClick={() => markUnpaid(r.id)}>Undo</button> : <button className={btnSuccessSm} onClick={() => markPaid(r.id)}>✓ Pay</button>}</td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile card view — shown only on small screens */}
+            <div className="hidden max-md:block px-4 py-2 max-sm:px-3">
+              {loan.repayments.map(r => (
+                <div key={r.id} className={`border-b border-border py-4 last:border-b-0 ${r.status === 'paid' ? 'opacity-60' : ''}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-text-primary">Month {r.month_number}</span>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium ${badgeClass(r.status)}`}>{r.status}</span>
+                    </div>
+                    <span className="text-xs text-text-muted">{new Date(r.due_date).toLocaleDateString()}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
+                    <div><span className="text-[10px] font-medium text-text-muted uppercase tracking-wider block">Payment</span><span className="text-sm font-bold text-text-primary tabular-nums">{fmt(r.amount_due)}</span></div>
+                    <div><span className="text-[10px] font-medium text-text-muted uppercase tracking-wider block">Principal</span><span className="text-sm font-semibold text-text-primary tabular-nums">{fmt(r.principal_component)}</span></div>
+                    <div><span className="text-[10px] font-medium text-text-muted uppercase tracking-wider block">Interest</span><span className="text-sm font-semibold text-amber-600 tabular-nums">{fmt(r.interest_component)}</span></div>
+                    <div><span className="text-[10px] font-medium text-text-muted uppercase tracking-wider block">Balance</span><span className="text-sm font-semibold text-text-primary tabular-nums">{fmt(r.closing_balance)}</span></div>
+                  </div>
+                  {user.role !== 'viewer' && (
+                    <div>
+                      {r.status === 'paid'
+                        ? <button className={`${btnSecondarySm} w-full justify-center min-h-[40px]`} onClick={() => markUnpaid(r.id)}>Undo Payment</button>
+                        : <button className={`${btnSuccessSm} w-full justify-center min-h-[40px]`} onClick={() => markPaid(r.id)}>✓ Mark as Paid</button>
+                      }
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : <div className="flex flex-col items-center justify-center py-20 px-6 text-center"><p className="text-sm text-text-muted">No schedule found</p></div>}
       </div>
 
       <Modal isOpen={showEditModal} onClose={() => setShowEditModal(false)} title="Edit Loan">
